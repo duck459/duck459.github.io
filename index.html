@@ -521,7 +521,6 @@
             status.style.display = 'none';
             const data = {
               from_name: form.from_name.value,
-              reply_to: form.reply_to.value,
               subject: form.subject.value,
               message: form.message.value,
               to_email: 'devayadav183636@gmail.com' // your inbox
@@ -549,20 +548,19 @@
 
           function fallbackMailto(data){
             const subject = encodeURIComponent(data.subject || 'Contact from website');
-            const bodyText = 'Name: ' + data.reply_to + '\n\n' + (data.message || '');
+            const bodyText = 'Name: ' + (data.from_name || '') + '\n\n' + (data.message || '');
             const body = encodeURIComponent(bodyText);
-            // Try opening Gmail compose in a new tab
+            // Try opening Gmail compose in a new tab; if popup is blocked, fall back to mailto
             const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(data.to_email)}&su=${subject}&body=${body}`;
-            try {
-              window.open(gmailUrl, '_blank');
-              status.style.display = 'block';
-              status.textContent = 'Opened Gmail compose in a new tab. If it did not open, your browser may block popups.';
-            } catch (e) {
-              // fallback to mailto if popup blocked
+            const win = window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+            if (!win) {
               const mailto = `mailto:${data.to_email}?subject=${subject}&body=${body}`;
               window.location.href = mailto;
               status.style.display = 'block';
               status.textContent = 'Opened mail client as fallback. If nothing happened, please configure EmailJS.';
+            } else {
+              status.style.display = 'block';
+              status.textContent = 'Opened Gmail compose in a new tab. If it did not open, your browser may block popups.';
             }
           }
         })();
