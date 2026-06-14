@@ -457,10 +457,62 @@
       .sidebar.open { transform: translateX(0); }
       .detail-panel { display: none; }
       .main-area { height: auto; min-height: 100vh; }
+
+      body { font-size: 15px; }
+      .main-header { padding: 12px 16px; position: sticky; top: 0; z-index: 50; }
+      .header-title h1 { font-size: 18px; }
+      .btn-add-task { padding: 10px 14px; min-height: 44px; }
+      .btn-add-task .btn-text { display: none; }
+      .btn-hamburger {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 44px; height: 44px; margin-right: 4px;
+        background: transparent; border: 1px solid var(--border); border-radius: var(--radius);
+        color: var(--text); font-size: 20px; cursor: pointer; flex-shrink: 0;
+      }
+      .btn-hamburger:active { background: var(--card-hover); }
+      .sidebar-backdrop {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,.6); z-index: 999;
+      }
+      .sidebar-backdrop.open { display: block; }
+      .main-content { padding: 16px 12px 32px; }
+      .task-item { padding: 14px 12px; gap: 10px; min-height: 56px; }
+      .task-checkbox { width: 22px; height: 22px; }
+      .task-title { font-size: 15px; line-height: 1.4; word-break: break-word; }
+      .task-action-btn { opacity: 1; width: 36px; height: 36px; font-size: 16px; }
+      .task-actions { gap: 2px; }
+      .task-meta { gap: 6px; }
+      .task-meta > * { font-size: 11px; padding: 2px 6px; }
+      .empty-state { padding: 40px 16px; }
+      .empty-state-icon { font-size: 40px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .modal-content { width: 94%; padding: 18px; max-height: 92vh; }
+      .modal-header h2 { font-size: 17px; }
+      .form-group input, .form-group select, .form-group textarea { padding: 12px; font-size: 16px; min-height: 44px; }
+      .form-group textarea { min-height: 80px; }
+      .btn-submit, .btn-cancel, .btn-edit, .btn-delete-detail { min-height: 48px; padding: 12px; font-size: 15px; }
+      .data-btn { min-height: 48px; }
+      .toast { bottom: 16px; left: 16px; right: 16px; transform: none; text-align: center; }
+      .detail-panel.mobile-open {
+        display: flex; position: fixed; left: 0; right: 0; bottom: 0;
+        height: 75vh; z-index: 1500; border-left: none;
+        border-top-left-radius: 16px; border-top-right-radius: 16px;
+        box-shadow: 0 -10px 30px rgba(0,0,0,.5);
+        animation: slideUp .25s ease-out;
+      }
+      .detail-panel.mobile-open::before {
+        content: ''; display: block; width: 40px; height: 4px;
+        background: var(--border); border-radius: 2px;
+        margin: 8px auto 0;
+      }
+      @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     }
+
+    @media (min-width: 769px) { .btn-hamburger { display: none; } }
   </style>
 </head>
 <body>
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
 <div class="app-wrapper">
 
   <!-- SIDEBAR -->
@@ -544,11 +596,12 @@
   <div class="main-area">
     <header class="main-header">
       <div class="header-title">
+        <button class="btn-hamburger" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
         <h1 id="headerTitle">Today</h1>
         <span class="count" id="headerCount">0</span>
       </div>
       <div class="header-actions">
-        <button class="btn-add-task" onclick="openAddModal()">+ Add Task</button>
+        <button class="btn-add-task" onclick="openAddModal()"><span class="btn-text">+ Add Task</span></button>
       </div>
     </header>
 
@@ -757,6 +810,23 @@ function switchView(btn) {
   closeDetail();
   renderMain();
   updateCounts();
+  if (window.innerWidth <= 768) closeSidebar();
+}
+
+// ── MOBILE SIDEBAR ─────────────────────────────────────────
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const bd = document.getElementById('sidebarBackdrop');
+  const isOpen = sb.classList.contains('open');
+  if (isOpen) closeSidebar(); else openSidebar();
+}
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarBackdrop').classList.add('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarBackdrop').classList.remove('open');
 }
 
 // ── RENDER MAIN TASK LIST ───────────────────────────────────
@@ -839,6 +909,9 @@ function selectTask(id) {
         <button class="btn-delete-detail" onclick="deleteTask(null,${id})">Delete</button>
       </div>
     </div>`;
+  if (window.innerWidth <= 768) {
+    document.querySelector('.detail-panel').classList.add('mobile-open');
+  }
 }
 
 function closeDetail() {
@@ -848,6 +921,7 @@ function closeDetail() {
       <div class="detail-empty-icon">📋</div>
       <p>Select a task to view details</p>
     </div>`;
+  document.querySelector('.detail-panel').classList.remove('mobile-open');
 }
 
 // ── TOGGLE COMPLETE ─────────────────────────────────────────
