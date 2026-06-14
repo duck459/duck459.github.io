@@ -24,7 +24,7 @@ function getTzTime(tz) {
 }
 
 const face01 = select("#face01").getAttribute("d"),
-	face02 = select("#face01").getAttribute("d"),
+	face02 = select("#face02").getAttribute("d"),
 
 	handSec01 = select("#handSec01").getAttribute("d"),
 	handSec02 = select("#handSec02").getAttribute("d"),
