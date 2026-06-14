@@ -136,7 +136,7 @@ function startAnimation() {
 		.call(() => {
 			let rotation = parseFloat(gsap.getProperty(hr, "rotation").toFixed(1));
 			if ((rotation > 2 && rotation < 178) || (rotation > 182 && rotation < 358)) {
-				changingHr = true;
+				let changingHr = true;
 				gsap.timeline({ repeat: 0, defaults: { duration: 0.25, ease: "bounce.in" } })
 					.to("#hand-hr", { morphSVG: "#handHr02" })
 					.to("#hand-hr", { morphSVG: "#handHr01" });
