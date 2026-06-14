@@ -51,13 +51,13 @@ function startAnimation() {
 	setTimeMinHr();
 	gsap.set([".gsapWrapper", ".vline"], { autoAlpha: 1, });
 
-	gsap.to(".cw.t24", 1, { rotation: "-=15", transformOrigin: "50% 50%", ease: "bounce", onComplete: function () { this.invalidate().delay(1).restart(true); } });
-	gsap.to(".cw.t20", 1, { rotation: "-=18", transformOrigin: "50% 50%", ease: "bounce", onComplete: function () { this.invalidate().delay(1).restart(true); } });
-	gsap.to(".ccw.t12", 1, { rotation: "+=30", transformOrigin: "50% 50%", ease: "bounce", onComplete: function () { this.invalidate().delay(1).restart(true); } });
+	gsap.to(".cw.t24", 1, { rotation: "+=15", transformOrigin: "50% 50%", ease: "bounce", onComplete: function () { this.invalidate().delay(1).restart(true); } });
+	gsap.to(".cw.t20", 1, { rotation: "+=18", transformOrigin: "50% 50%", ease: "bounce", onComplete: function () { this.invalidate().delay(1).restart(true); } });
+	gsap.to(".ccw.t12", 1, { rotation: "-=30", transformOrigin: "50% 50%", ease: "bounce", onComplete: function () { this.invalidate().delay(1).restart(true); } });
 	gsap.to(min, 0.5, {
 		rotation: getMinRotation, transformOrigin: "50% 50%", ease: "none", onComplete: function () {
 
-			if (gsap.getProperty(min, "rotation") >= 360)
+			if (Math.abs(gsap.getProperty(min, "rotation")) >= 360)
 				gsap.set(min, { rotation: 0, transformOrigin: "50% 50%" });
 			this.invalidate().delay(5).restart(true);
 
@@ -67,7 +67,7 @@ function startAnimation() {
 	gsap.to(hr, 0.5, {
 		rotation: getHrRotation, transformOrigin: "50% 50%", ease: "none", onComplete: function () {
 
-			if (gsap.getProperty(hr, "rotation") >= 360)
+			if (Math.abs(gsap.getProperty(hr, "rotation")) >= 360)
 				gsap.set(hr, { rotation: 0, transformOrigin: "50% 50%" });
 			this.invalidate().delay(5).restart(true);
 
@@ -78,7 +78,7 @@ function startAnimation() {
 		rotation: geSecRotation, transformOrigin: "50% 50%", ease: "bounce", onComplete: function () {
 
 			setTimeSec();
-			if (gsap.getProperty(sec, "rotation") >= 360)
+			if (Math.abs(gsap.getProperty(sec, "rotation")) >= 360)
 				gsap.set(sec, { rotation: 0, transformOrigin: "50% 50%" });
 			this.invalidate().delay(0.).restart(true);
 
@@ -164,16 +164,17 @@ function startAnimation() {
 	function geSecRotation() {
 
 		let time = getTzTime(currentTimezone);
-		let rotation = time.seconds * 6;
+		let rotation = -(time.seconds * 6);
 		let scaleXSec = gsap.getProperty(sec, "scaleX");
 
 		let difference = Math.abs(gsap.getProperty(sec, "rotation") - rotation);
 		if (difference >= 12)
 			gsap.set(sec, { rotation: rotation, transformOrigin: "50% 50%" });
 
-		if ((rotation >= 180 && rotation < 360) && (scaleXSec == 1))
+		let absRot = Math.abs(rotation) % 360;
+		if ((absRot >= 180 && absRot < 360) && (scaleXSec == 1))
 			gsap.to(sec, { scaleX: -1, duration: 0.25 });
-		else if ((rotation < 180 || rotation >= 360) && (scaleXSec == -1))
+		else if ((absRot < 180 || absRot >= 360) && (scaleXSec == -1))
 			gsap.to(sec, { scaleX: 1, duration: 0.25 });
 
 		return rotation;
@@ -182,16 +183,17 @@ function startAnimation() {
 	function getMinRotation() {
 
 		let time = getTzTime(currentTimezone);
-		let rotation = time.minutes * 6 + time.seconds * 6 / 59;
+		let rotation = -(time.minutes * 6 + time.seconds * 6 / 59);
 		let scaleXMin = gsap.getProperty(min, "scaleX");
 
 		let difference = Math.abs(gsap.getProperty(min, "rotation") - rotation);
 		if (difference >= 5)
 			gsap.set(min, { rotation: rotation, transformOrigin: "50% 50%" });
 
-		if ((rotation >= 180 && rotation < 360) && (scaleXMin == 1))
+		let absRot = Math.abs(rotation) % 360;
+		if ((absRot >= 180 && absRot < 360) && (scaleXMin == 1))
 			gsap.to(min, { scaleX: -1, duration: 0.25 });
-		else if ((rotation < 180 || rotation >= 360) && (scaleXMin == -1))
+		else if ((absRot < 180 || absRot >= 360) && (scaleXMin == -1))
 			gsap.to(min, { scaleX: 1, duration: 0.25 });
 
 		return rotation;
@@ -201,16 +203,17 @@ function startAnimation() {
 	function getHrRotation() {
 
 		let time = getTzTime(currentTimezone);
-		let rotation = (time.hours % 12) * 30 + time.minutes * 0.5;
+		let rotation = -((time.hours % 12) * 30 + time.minutes * 0.5);
 		let scaleHr = gsap.getProperty(hr, "scaleX");
 
 		let difference = Math.abs(gsap.getProperty(hr, "rotation") - rotation);
 		if (difference >= 5)
 			gsap.set(hr, { rotation: rotation, transformOrigin: "50% 50%" });
 
-		if ((rotation >= 180 && rotation < 360) && (scaleHr == 1))
+		let absRot = Math.abs(rotation) % 360;
+		if ((absRot >= 180 && absRot < 360) && (scaleHr == 1))
 			gsap.to(hr, { scaleX: -1, duration: 0.25 });
-		else if ((rotation < 180 || rotation >= 360) && (scaleHr == -1))
+		else if ((absRot < 180 || absRot >= 360) && (scaleHr == -1))
 			gsap.to(hr, { scaleX: 1, duration: 0.25 });
 
 		return rotation;
