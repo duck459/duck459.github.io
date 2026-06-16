@@ -1,7 +1,7 @@
 let select = e => document.querySelector(e);
 let selectAll = e => document.querySelectorAll(e);
 
-let currentTimezone = 'Asia/Tokyo'; // Default timezone
+let currentTimezone = 'Asia/Kolkata'; // Default timezone
 
 // Helper function to get hours, minutes, and seconds based on a specific timezone
 function getTzTime(tz) {
