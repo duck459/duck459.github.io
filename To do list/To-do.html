@@ -7,6 +7,7 @@
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
   <title>Just Do It - Smart Task Manager</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,7 +41,7 @@
 
     .app-wrapper {
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 260px 1fr;
       min-height: 100vh;
     }
 
@@ -54,6 +55,8 @@
       position: sticky;
       top: 0;
       overflow-y: auto;
+      flex-shrink: 0;
+      width: 260px;
     }
 
     .sidebar-header {
@@ -72,10 +75,51 @@
     }
 
     .logo span {
-      background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+  animation: lights 5s 750ms linear infinite;
     }
+
+@keyframes lights {
+  0% {
+    color: var(--text-secondary);
+    text-shadow:
+      0 0 1em rgba(79, 142, 247, 0.2),
+      0 0 0.125em rgba(79, 142, 247, 0.3),
+      -1em -0.125em 0.5em rgba(167, 139, 250, 0),
+      1em 0.125em 0.5em rgba(79, 142, 247, 0);
+  }
+  30% {
+    color: var(--text);
+    text-shadow:
+      0 0 1em rgba(79, 142, 247, 0.5),
+      0 0 0.125em rgba(79, 142, 247, 0.5),
+      -0.5em -0.125em 0.25em rgba(167, 139, 250, 0.2),
+      0.5em 0.125em 0.25em rgba(79, 142, 247, 0.4);
+  }
+  40% {
+    color: var(--text);
+    text-shadow:
+      0 0 1em rgba(79, 142, 247, 0.5),
+      0 0 0.125em rgba(167, 139, 250, 0.8),
+      -0.25em -0.125em 0.125em rgba(167, 139, 250, 0.2),
+      0.25em 0.125em 0.125em rgba(79, 142, 247, 0.4);
+  }
+  70% {
+    color: var(--text);
+    text-shadow:
+      0 0 1em rgba(79, 142, 247, 0.5),
+      0 0 0.125em rgba(79, 142, 247, 0.5),
+      0.5em -0.125em 0.25em rgba(167, 139, 250, 0.2),
+      -0.5em 0.125em 0.25em rgba(79, 142, 247, 0.4);
+  }
+  100% {
+    color: var(--text-secondary);
+    text-shadow:
+      0 0 1em rgba(79, 142, 247, 0.2),
+      0 0 0.125em rgba(79, 142, 247, 0.3),
+      1em -0.125em 0.5em rgba(167, 139, 250, 0),
+      -1em 0.125em 0.5em rgba(79, 142, 247, 0);
+  }
+}
 
     .user-section {
       padding: 14px 16px;
@@ -90,13 +134,19 @@
       border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), #a78bfa);
       display: flex; align-items: center; justify-content: center;
-      color: white; font-weight: 700; font-size: 16px;
+      color: #000000; font-weight: 700; font-size: 16px;
     }
 
     .user-info h4 { font-size: 13px; font-weight: 600; }
     .user-info p  { font-size: 12px; color: var(--text-secondary); }
 
-    .sidebar-content { flex: 1; overflow-y: auto; padding: 12px 8px; }
+    .sidebar-content {
+      flex: 1; overflow-y: auto;
+      padding: 20px 8px 8px;
+      scrollbar-width: none; -ms-overflow-style: none;
+      overflow-x: hidden;
+    }
+    .sidebar-content::-webkit-scrollbar { display: none; }
 
     .sidebar-section { margin-bottom: 8px; }
 
@@ -173,10 +223,12 @@
       background: var(--accent); color: white; border: none;
       padding: 8px 16px; border-radius: var(--radius);
       cursor: pointer; font-size: 14px; font-weight: 600;
-      transition: all .2s; display: flex; align-items: center; gap: 6px;
-    }
-
-    .btn-add-task:hover { background: #3a7af0; box-shadow: 0 2px 8px rgba(79,142,247,.3); }
+          transition: all .2s; display: inline-flex; align-items: center; gap: 6px;
+          font-family: inherit;
+        }
+        .btn-add-task .btn-icon { font-size: 18px; line-height: 1; font-weight: 400; }
+        .btn-add-task:hover { background: #3a7af0; box-shadow: 0 2px 8px rgba(79,142,247,.3); }
+        .btn-add-task:active { transform: translateY(1px); }
 
     .main-content { flex: 1; overflow-y: auto; padding: 24px; }
 
@@ -258,6 +310,105 @@
     .empty-state-icon { font-size: 48px; margin-bottom: 16px; opacity: .5; }
     .empty-state h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
 
+    .empty-container {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 80px 20px; color: var(--text-muted);
+      min-height: 50vh; gap: 12px;
+    }
+    .empty-container .empty-icon {
+      font-size: 56px; line-height: 1; opacity: .6;
+      margin-bottom: 8px;
+    }
+    .empty-container .empty-title {
+      font-size: 18px; font-weight: 600; color: var(--text);
+    }
+    .empty-container .empty-sub {
+      font-size: 14px; color: var(--text-muted);
+    }
+    .empty-container .empty-action {
+      margin-top: 12px;
+    }
+
+    /* AUTH SCREEN */
+    .auth-screen {
+      position: fixed; inset: 0; z-index: 3000;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0a0a1a 0%, #000 50%, #1a0a2a 100%);
+      padding: 20px;
+    }
+    .auth-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      width: 100%; max-width: 420px;
+      box-shadow: 8px 8px 0 0 var(--border);
+    }
+    .auth-logo {
+      display: flex; align-items: center; gap: 10px;
+      justify-content: center; margin-bottom: 8px;
+    }
+    .auth-logo-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .auth-title {
+      font-size: 22px; font-weight: 700; text-align: center;
+      margin-bottom: 4px;
+    }
+    .auth-sub {
+      font-size: 13px; color: var(--text-muted);
+      text-align: center; margin-bottom: 24px;
+    }
+    .auth-tabs {
+      display: flex; gap: 0; margin-bottom: 20px;
+      border: 2px solid var(--border); border-radius: 8px;
+      overflow: hidden;
+    }
+    .auth-tab {
+      flex: 1; padding: 10px;
+      background: transparent; color: var(--text-muted);
+      border: none; cursor: pointer;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      transition: all .2s;
+    }
+    .auth-tab.active {
+      background: var(--accent); color: #fff;
+    }
+    .auth-error {
+      color: var(--danger); font-size: 13px;
+      margin: -8px 0 12px; min-height: 18px;
+    }
+    .auth-switch {
+      text-align: center; font-size: 13px;
+      color: var(--text-muted); margin-top: 16px;
+    }
+    .auth-switch a {
+      color: var(--accent); cursor: pointer;
+      text-decoration: none; font-weight: 600;
+    }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    .user-chip {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 999px;
+      background: var(--card-hover); font-size: 12px;
+      max-width: 180px;
+    }
+    .user-chip-avatar {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+    .user-chip-name {
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      font-weight: 600;
+    }
+
     /* MODAL */
     .modal {
       display: none; position: fixed; inset: 0;
@@ -269,9 +420,12 @@
 
     .modal-content {
       background: #111; border-radius: var(--radius); padding: 24px;
-      max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 10px 40px rgba(0,0,0,.6); border: 1px solid var(--border);
-    }
+          max-width: 500px; width: 90%; max-height: 90vh;
+          overflow-x: hidden; overflow-y: auto;
+          scrollbar-width: none; -ms-overflow-style: none;
+          box-shadow: 0 10px 40px rgba(0,0,0,.6); border: 1px solid var(--border);
+        }
+        .modal-content::-webkit-scrollbar { display: none; }
 
     .settings-modal .modal-content { max-width: 600px; }
 
@@ -287,29 +441,45 @@
     .form-group { margin-bottom: 16px; }
 
     .form-group label {
-      display: block; font-size: 12px; font-weight: 600;
-      color: var(--text-secondary); margin-bottom: 6px;
-      text-transform: uppercase; letter-spacing: .05em;
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--text); margin-bottom: 4px;
     }
 
     .form-group input,
     .form-group select,
     .form-group textarea {
       width: 100%; padding: 10px 12px;
-      border: 1px solid var(--border); border-radius: var(--radius);
+      border: 2px solid var(--border); border-radius: 6px;
       font-family: inherit; font-size: 14px; color: var(--text);
-      background: var(--bg); outline: none; transition: border-color .2s;
+      background: var(--card); outline: none;
+      box-shadow: 4px 4px 0 0 var(--border);
+      transition: transform .15s, box-shadow .15s, border-color .2s;
     }
 
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,.2);
+      border-color: var(--accent);
+      box-shadow: 4px 4px 0 0 var(--accent);
+      transform: translate(-1px, -1px);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-muted);
     }
 
     .form-group textarea { resize: vertical; min-height: 80px; }
 
-    .form-group select option { background: #111; color: var(--text); }
+    .form-group select {
+      appearance: none; -webkit-appearance: none; -moz-appearance: none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    .form-group select option { background: var(--card); color: var(--text); }
 
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
@@ -346,6 +516,202 @@
     .setting-item-title { font-size: 13px; font-weight: 600; }
     .setting-item-desc  { font-size: 12px; color: var(--text-muted); }
 
+    /* THEME PILLS (Uiverse.io by LightAndy1) — scoped to settings modal */
+    .theme-pills {
+      --font-color-dark: #bebfc5;
+      --font-color-light: #bebfc5;
+      --bg-color: #212121;
+      --main-color: #0c0c0c;
+      --secondary-color: #141414;
+      position: relative;
+      width: 250px;
+      height: 36px;
+      background-color: var(--bg-color);
+      border: 2px solid var(--main-color);
+      border-radius: 34px;
+      display: flex;
+      flex-direction: row;
+      box-shadow: 4px 4px var(--main-color);
+      flex-shrink: 0;
+    }
+    .theme-pills .option {
+      margin-right: 5px;
+      width: 80.5px;
+      height: 28px;
+      position: relative;
+      top: 2px;
+      left: 2px;
+      border-radius: 34px;
+      transition: 0.25s cubic-bezier(0, 0, 0, 1);
+    }
+    .theme-pills .option:last-child { margin-right: 4px; }
+    .theme-pills .option:hover { background-color: var(--secondary-color); }
+    .theme-pills .option:hover .span { color: var(--font-color-light); }
+    .theme-pills .input {
+      width: 100%; height: 100%;
+      position: absolute; left: 0; top: 0;
+      appearance: none; cursor: pointer;
+    }
+    .theme-pills .btn {
+      width: 100%; height: 100%;
+      border-radius: 50px;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .theme-pills .span { color: var(--font-color-dark); }
+    .theme-pills .input:checked + .btn {
+      background-color: var(--main-color);
+      transition: 0.2s cubic-bezier(0, 0, 0, 1);
+    }
+    .theme-pills .input:checked + .btn .span {
+      color: var(--font-color-light);
+      transition: 0.25s cubic-bezier(0, 0, 0, 1);
+    }
+
+    /* THEME VARIANTS — only applied when the body opts in via data-theme */
+    body[data-theme="dark"] {
+      --bg: #000000;
+      --sidebar-bg: #000000;
+      --card: #0d0d0d;
+      --card-hover: #1a1a1a;
+      --border: #2222cc;
+      --accent: #4f8ef7;
+      --accent-light: #1a2a5a;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --text: #ffffff;
+      --text-secondary: #b0b0b0;
+      --text-muted: #808080;
+    }
+    body[data-theme="light"] {
+      --bg: #f5f7fb;
+      --sidebar-bg: #ffffff;
+      --card: #ffffff;
+      --card-hover: #eef1f8;
+      --border: #c9d1e0;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --success: #059669;
+      --warning: #b45309;
+      --danger: #b91c1c;
+      --text: #000000;
+      --text-secondary: #1f2937;
+      --text-muted: #374151;
+    }
+    body[data-theme="solar"] {
+      --bg: #fff7ed;
+      --sidebar-bg: #fffaf0;
+      --card: #fff;
+      --card-hover: #fef3c7;
+      --border: #f59e0b;
+      --accent: #ea580c;
+      --accent-light: #ffedd5;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --text: #000000;
+      --text-secondary: #1c1917;
+      --text-muted: #44403c;
+    }
+
+    /* Force every text-bearing element to use the theme variable
+       (some hard-coded colors stayed behind from the original stylesheet) */
+    body[data-theme] .sidebar,
+    body[data-theme] .sidebar-header,
+    body[data-theme] .sidebar-content,
+    body[data-theme] .sidebar-footer,
+    body[data-theme] .sidebar-section,
+    body[data-theme] .sidebar-section-title,
+    body[data-theme] .user-section,
+    body[data-theme] .user-info,
+    body[data-theme] .user-info h4,
+    body[data-theme] .logo,
+    body[data-theme] .logo span,
+    body[data-theme] .nav-item,
+    body[data-theme] .nav-item-icon,
+    body[data-theme] .nav-item-count,
+    body[data-theme] .list-item,
+    body[data-theme] .list-name,
+    body[data-theme] .list-count,
+    body[data-theme] .new-list-btn,
+    body[data-theme] .settings-btn,
+    body[data-theme] .main-content,
+    body[data-theme] .task-item,
+    body[data-theme] .modal-content,
+    body[data-theme] .settings-section,
+    body[data-theme] .setting-item,
+    body[data-theme] .setting-item-title,
+    body[data-theme] .setting-item-desc,
+    body[data-theme] .task-title,
+    body[data-theme] .task-meta,
+    body[data-theme] .task-desc,
+    body[data-theme] .empty-state,
+    body[data-theme] .empty-state h3,
+    body[data-theme] .modal-header h2,
+    body[data-theme] .form-group label,
+    body[data-theme] .form-group input,
+    body[data-theme] .form-group textarea,
+    body[data-theme] .form-group select,
+    body[data-theme] .btn-cancel,
+    body[data-theme] .data-btn,
+    body[data-theme] .neon-checkbox__check {
+      color: var(--text) !important;
+    }
+    body[data-theme] .sidebar-section-title,
+    body[data-theme] .nav-item-count,
+    body[data-theme] .empty-state,
+    body[data-theme] .form-group label,
+    body[data-theme] .setting-item-desc,
+    body[data-theme] .modal-close,
+    body[data-theme] .task-meta,
+    body[data-theme] .task-desc {
+      color: var(--text-muted) !important;
+    }
+    body[data-theme] .nav-item,
+    body[data-theme] .new-list-btn,
+    body[data-theme] .settings-btn {
+      color: var(--text-secondary) !important;
+    }
+    body[data-theme] .user-info p,
+    body[data-theme] .task-meta,
+    body[data-theme] .task-desc {
+      color: var(--text-secondary) !important;
+    }
+    body[data-theme] .sidebar,
+    body[data-theme] .main-content,
+    body[data-theme] .task-item,
+    body[data-theme] .modal-content,
+    body[data-theme] .setting-item,
+    body[data-theme] .form-group input,
+    body[data-theme] .form-group textarea,
+    body[data-theme] .form-group select,
+    body[data-theme] .btn-cancel,
+    body[data-theme] .data-btn {
+      background-color: var(--card) !important;
+    }
+    body[data-theme] .sidebar {
+      background-color: var(--sidebar-bg) !important;
+    }
+    body[data-theme] {
+      background-color: var(--bg) !important;
+    }
+
+        /* Force ALL sidebar text (including .sidebar-content rows, icons, dividers,
+           badges, list items, section titles, etc.) to black in the light + solar
+           themes — overrides the generic body[data-theme] color rule above. */
+        body[data-theme="light"] .sidebar,
+        body[data-theme="light"] .sidebar *,
+        body[data-theme="solar"] .sidebar,
+        body[data-theme="solar"] .sidebar * {
+          color: #000000 !important;
+        }
+        body[data-theme="light"] .sidebar-content,
+        body[data-theme="solar"] .sidebar-content,
+        body[data-theme="light"] .sidebar-content *,
+        body[data-theme="solar"] .sidebar-content * {
+          color: #000000 !important;
+        }
+
     .toggle-switch {
       position: relative; width: 44px; height: 24px;
       background: #333; border-radius: 999px; cursor: pointer; transition: background .3s; flex-shrink: 0;
@@ -362,15 +728,49 @@
     .toggle-switch.on::after { left: 22px; }
 
     .data-btn {
-      width: 100%; padding: 10px; background: transparent; border-radius: var(--radius);
-      cursor: pointer; font-weight: 600; transition: all .2s; margin-bottom: 8px;
-      font-family: inherit; font-size: 14px;
-    }
-
-    .data-btn.export { border: 1px solid var(--accent); color: var(--accent); }
-    .data-btn.export:hover { background: rgba(79,142,247,.1); }
-    .data-btn.clear  { border: 1px solid rgba(248,113,113,.5); color: var(--danger); }
-    .data-btn.clear:hover  { background: rgba(248,113,113,.15); }
+          width: 100%;
+          padding: 10px 20px;
+          text-transform: uppercase;
+          border-radius: 8px;
+          font-size: 17px;
+          font-weight: 500;
+          color: #ffffff80;
+          text-shadow: none;
+          background: transparent;
+          cursor: pointer;
+          box-shadow: transparent;
+          border: 1px solid #ffffff80;
+          transition: 0.5s ease;
+          user-select: none;
+          font-family: inherit;
+          margin-bottom: 12px;
+          letter-spacing: 0.02em;
+        }
+        .data-btn:hover,
+        .data-btn:focus {
+          color: #ffffff;
+          background: #008cff;
+          border: 1px solid #008cff;
+          text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+          box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+            0 0 100px #008cff;
+          outline: none;
+        }
+        /* Per-action tints (still neon on hover) */
+        .data-btn.clear:hover,
+        .data-btn.clear:focus {
+          background: #ff3b3b;
+          border-color: #ff3b3b;
+          box-shadow: 0 0 5px #ff3b3b, 0 0 20px #ff3b3b, 0 0 50px #ff3b3b,
+            0 0 100px #ff3b3b;
+        }
+        .data-btn.download:hover,
+        .data-btn.download:focus {
+          background: #00d97e;
+          border-color: #00d97e;
+          box-shadow: 0 0 5px #00d97e, 0 0 20px #00d97e, 0 0 50px #00d97e,
+            0 0 100px #00d97e;
+        }
 
     /* TOAST */
     .toast {
@@ -385,6 +785,7 @@
     /* RESPONSIVE */
     @media (max-width: 1200px) {
       .app-wrapper { grid-template-columns: 240px 1fr; }
+      .sidebar { width: 240px; }
     }
 
     @media (max-width: 768px) {
@@ -531,9 +932,25 @@
         <span class="count" id="headerCount">0</span>
       </div>
       <div class="header-actions">
-        <button class="Btn" onclick="openAddModal()">Add Task 
-          <svg class="svg" viewBox="0 0 512 512">
-            <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"></path></svg>
+        <div class="user-chip" id="userChip" style="display:none;" title="">
+          <div class="user-chip-avatar" id="userChipAvatar">U</div>
+          <div class="user-chip-name" id="userChipName">User</div>
+        </div>
+        <button class="btn-add-task" onclick="openAddModal()" aria-label="Add task">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1.25rem"
+            height="1.25rem"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <path d="M12 19v-7m0 0V5m0 7H5m7 0h7"></path>
+          </svg>
+          Add task to continue
         </button>
       </div>
     </header>
@@ -551,12 +968,12 @@
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
     <div class="form-group">
-      <label>Task Title *</label>
-      <input type="text" id="taskTitle" placeholder="Enter task title…" />
+      <label>Task Title </label>
+      <input type="text" id="taskTitle" class="input" placeholder="Enter task title…" />
     </div>
     <div class="form-group">
       <label>Description</label>
-      <textarea id="taskDesc" placeholder="Add details…"></textarea>
+      <textarea id="taskDesc" class="input" placeholder="Enter description…" rows="3"></textarea>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -609,7 +1026,7 @@
           <div class="setting-item-title">Show Task Descriptions</div>
           <div class="setting-item-desc">Display descriptions in the task list</div>
         </div>
-        <!-- Checkbox --> 
+        <!-- Checkbox -->
         <label class="neon-checkbox">
           <input type="checkbox" id="toggle-showDescriptions" onchange="toggleSetting('showDescriptions')" />
           <div class="neon-checkbox__frame">
@@ -645,9 +1062,45 @@
     </div>
 
     <div class="settings-section">
+      <h3>Theme</h3>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          <div class="setting-item-title">Color Theme</div>
+          <div class="setting-item-desc">Switch the look of the app</div>
+        </div>
+        <div class="wrapper theme-pills" id="theme-toggle" role="radiogroup" aria-label="Theme selector">
+          <div class="option">
+            <input checked="" value="dark" name="theme" type="radio" class="input" />
+            <div class="btn"><span class="span">Dark</span></div>
+          </div>
+          <div class="option">
+            <input value="light" name="theme" type="radio" class="input" />
+            <div class="btn"><span class="span">Light</span></div>
+          </div>
+          <div class="option">
+            <input value="solar" name="theme" type="radio" class="input" />
+            <div class="btn"><span class="span">Solar</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
       <h3>Data Management</h3>
-      <button class="data-btn export" onclick="exportData()">📥 Export Tasks as JSON</button>
-      <button class="data-btn clear"  onclick="clearAllTasks()">🗑️ Clear All Tasks</button>
+            <button class="data-btn" onclick="exportData()">📥 Export Tasks as JSON</button>
+            <button class="data-btn download" onclick="downloadTasksFile()">⬇️ Download JSON File</button>
+            <button class="data-btn clear" onclick="clearAllTasks()">🗑️ Clear All Tasks</button>
+          </div>
+
+    <div class="settings-section">
+      <h3>Account</h3>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          <div class="setting-item-title" id="accountEmailLabel">Signed in</div>
+          <div class="setting-item-desc">Click below to sign out of this account on this device.</div>
+        </div>
+        <button class="data-btn clear" onclick="signOut()">🚪 Sign Out</button>
+      </div>
     </div>
 
     <div class="form-actions" style="margin-top:20px;">
@@ -659,13 +1112,215 @@
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="authScreen" style="display:none;">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">✓</div>
+    </div>
+    <div class="auth-title">Just Do It</div>
+    <div class="auth-sub">Sign in to access your tasks</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
+      <button class="auth-tab" id="tabSignUp" onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+    <form id="authForm" onsubmit="return handleAuthSubmit(event)">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="authEmail" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="authPassword" placeholder="At least 6 characters" required minlength="6" autocomplete="current-password" />
+      </div>
+      <div class="auth-error" id="authError"></div>
+      <button type="submit" class="btn-submit" id="authSubmitBtn" style="width:100%;">Sign In</button>
+    </form>
+    <div class="auth-switch" id="authSwitch">
+      Don't have an account? <a onclick="switchAuthTab('signup')">Sign up</a>
+    </div>
+  </div>
+</div>
+
 <script>
+// ── AUTH ─────────────────────────────────────────────────────
+const AUTH_USERS_KEY = 'jdi_users';
+const AUTH_SESSION_KEY = 'jdi_session';
+let currentUser = null;
+let authMode = 'signin';
+
+function loadUsers() {
+  try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)) || []; }
+  catch(e) { return []; }
+}
+function saveUsers(users) {
+  localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
+}
+
+async function hashPassword(password, saltHex) {
+  const enc = new TextEncoder();
+  let salt = saltHex;
+  if (!salt) {
+    const arr = new Uint8Array(16);
+    crypto.getRandomValues(arr);
+    salt = Array.from(arr).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveBits']
+  );
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt: enc.encode(salt), iterations: 100000, hash: 'SHA-256' },
+    keyMaterial, 256
+  );
+  const hash = Array.from(new Uint8Array(bits))
+    .map(b => b.toString(16).padStart(2,'0')).join('');
+  return { salt, hash };
+}
+
+async function signUp(email, password) {
+  const users = loadUsers();
+  const normalized = email.trim().toLowerCase();
+  if (users.find(u => u.email === normalized)) {
+    return { ok: false, error: 'An account with this email already exists.' };
+  }
+  const { salt, hash } = await hashPassword(password);
+  const user = {
+    id: 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    email: normalized,
+    salt, hash,
+    createdAt: new Date().toISOString()
+  };
+  users.push(user);
+  saveUsers(users);
+  setSession(user);
+  return { ok: true, user };
+}
+
+async function signIn(email, password) {
+  const users = loadUsers();
+  const normalized = email.trim().toLowerCase();
+  const user = users.find(u => u.email === normalized);
+  if (!user) return { ok: false, error: 'No account found with this email.' };
+  const { hash } = await hashPassword(password, user.salt);
+  if (hash !== user.hash) return { ok: false, error: 'Incorrect password.' };
+  setSession(user);
+  return { ok: true, user };
+}
+
+function setSession(user) {
+  currentUser = user;
+  localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ id: user.id, email: user.email }));
+}
+
+function loadSession() {
+  try {
+    const s = JSON.parse(localStorage.getItem(AUTH_SESSION_KEY));
+    if (!s) return null;
+    const users = loadUsers();
+    return users.find(u => u.id === s.id) || null;
+  } catch(e) { return null; }
+}
+
+function signOut() {
+  if (!confirm('Sign out of ' + (currentUser ? currentUser.email : 'this account') + '?')) return;
+  currentUser = null;
+  tasks = [];
+  settings = { showDescriptions: false };
+  localStorage.removeItem(AUTH_SESSION_KEY);
+  showAuth();
+  const chip = document.getElementById('userChip');
+  if (chip) chip.style.display = 'none';
+  showToast('👋 Signed out');
+}
+
+function showAuth() {
+  const el = document.getElementById('authScreen');
+  el.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  switchAuthTab(authMode);
+}
+
+function hideAuth() {
+  const el = document.getElementById('authScreen');
+  el.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function switchAuthTab(mode) {
+  authMode = mode;
+  document.getElementById('tabSignIn').classList.toggle('active', mode === 'signin');
+  document.getElementById('tabSignUp').classList.toggle('active', mode === 'signup');
+  document.getElementById('authSubmitBtn').textContent = mode === 'signin' ? 'Sign In' : 'Create Account';
+  document.getElementById('authSwitch').innerHTML = mode === 'signin'
+    ? 'Don\'t have an account? <a onclick="switchAuthTab(\'signup\')">Sign up</a>'
+    : 'Already have an account? <a onclick="switchAuthTab(\'signin\')">Sign in</a>';
+  document.getElementById('authError').textContent = '';
+  const pass = document.getElementById('authPassword');
+  if (pass) pass.setAttribute('autocomplete', mode === 'signin' ? 'current-password' : 'new-password');
+}
+
+async function handleAuthSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
+  const errEl = document.getElementById('authError');
+  errEl.textContent = '';
+  const btn = document.getElementById('authSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Please wait…';
+  const result = authMode === 'signin'
+    ? await signIn(email, password)
+    : await signUp(email, password);
+  btn.disabled = false; btn.textContent = authMode === 'signin' ? 'Sign In' : 'Create Account';
+  if (!result.ok) { errEl.textContent = result.error; return false; }
+  onSignedIn(result.user);
+  return false;
+}
+
+function onSignedIn(user) {
+  document.getElementById('authEmail').value = '';
+  document.getElementById('authPassword').value = '';
+  loadUserData();
+  renderUserChip();
+  const accEl = document.getElementById('accountEmailLabel');
+  if (accEl) accEl.textContent = 'Signed in as ' + user.email;
+  hideAuth();
+  showToast('👋 Welcome' + (user.email ? ', ' + user.email.split('@')[0] : '') + '!');
+}
+
+function renderUserChip() {
+  const chip = document.getElementById('userChip');
+  if (!currentUser) { chip.style.display = 'none'; return; }
+  chip.style.display = 'flex';
+  const name = currentUser.email.split('@')[0];
+  document.getElementById('userChipName').textContent = name;
+  document.getElementById('userChipAvatar').textContent = name.charAt(0).toUpperCase();
+  chip.title = currentUser.email + ' — click to sign out';
+  chip.onclick = () => {
+    if (confirm('Sign out of ' + currentUser.email + '?')) signOut();
+  };
+  chip.style.cursor = 'pointer';
+}
+
 // ── STATE ──────────────────────────────────────────────────
-let tasks    = JSON.parse(localStorage.getItem('jdi_tasks'))    || [];
-let settings = JSON.parse(localStorage.getItem('jdi_settings')) || { showDescriptions: false };
+let tasks    = [];
+let settings = { showDescriptions: false };
 let currentView   = 'today';
 let editingId     = null;
-let nextId        = Math.max(0, ...tasks.map(t => t.id || 0)) + 1;
+let nextId        = 1;
+
+function taskKey()    { return 'jdi_tasks_' + currentUser.id; }
+function settingsKey(){ return 'jdi_settings_' + currentUser.id; }
+
+function loadUserData() {
+  if (!currentUser) return;
+  try { tasks = JSON.parse(localStorage.getItem(taskKey())) || []; }
+  catch(e) { tasks = []; }
+  try { settings = JSON.parse(localStorage.getItem(settingsKey())) || { showDescriptions: false }; }
+  catch(e) { settings = { showDescriptions: false }; }
+  nextId = Math.max(0, ...tasks.map(t => t.id || 0)) + 1;
+  renderMain();
+  updateCounts();
+}
 
 // ── DATE HELPERS ────────────────────────────────────────────
 function todayStr()    { return new Date().toISOString().split('T')[0]; }
@@ -778,13 +1433,15 @@ function renderMain() {
 
   if (list.length === 0) {
     container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">📭</div>
-        <h3>No tasks here</h3>
-        <p>Add a task to get started</p>
-      </div>`;
-    return;
-  }
+        <div class="empty-container">
+          <div class="empty-icon">📝</div>
+          <div class="empty-title">No tasks here yet</div>
+              
+          </div>
+        </div>
+    `;
+      return;
+    }
 
   container.innerHTML = list.map(task => taskHTML(task)).join('');
 }
@@ -812,8 +1469,17 @@ function taskHTML(task) {
       </div>
       <div class="task-actions">
         <button class="task-action-btn" title="Edit" onclick="editTask(event,${task.id})">✎</button>
-        <button class="task-action-btn delete" title="Delete" onclick="deleteTask(event,${task.id})">🗑️</button>
-      </div>
+          <div class="tip-wrap">
+    <button
+      class="tip-btn tip-btn--warn"
+      data-tip="This cannot be undone!"
+      data-dir="top"
+       onclick="deleteTask(event,${task.id})"
+     >
+       ⚠ Delete
+      </button>
+     </div>
+       </div>
     </div>`;
 }
 
@@ -834,13 +1500,16 @@ function toggleTask(id) {
 
 // ── DELETE ──────────────────────────────────────────────────
 function deleteTask(e, id) {
-  if (e) e.stopPropagation();
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
   if (!confirm('Delete this task?')) return;
   tasks = tasks.filter(t => t.id !== id);
   saveTasks();
   renderMain();
   updateCounts();
-  showToast('🗑️ Task deleted');
+  showToast('⚠ Task deleted');
 }
 
 // ── EDIT ────────────────────────────────────────────────────
@@ -941,6 +1610,46 @@ function closeSettings() {
   document.getElementById('settingsModal').classList.remove('active');
 }
 
+// ── THEME ────────────────────────────────────────────────────
+(function(){
+  var STORAGE_KEY = 'jdi_theme';
+  var body = document.body;
+  var radios = document.querySelectorAll('#theme-toggle input[name="theme"]');
+
+  function applyTheme(name){
+    if (!name) return;
+    body.setAttribute('data-theme', name);
+    radios.forEach(function(r){
+      if (r.value === name) r.checked = true;
+    });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch(e) {}
+  if (saved) applyTheme(saved);
+
+  radios.forEach(function(r){
+    r.addEventListener('change', function(){
+      if (r.checked) {
+        applyTheme(r.value);
+        try { localStorage.setItem(STORAGE_KEY, r.value); } catch(e) {}
+      }
+    });
+  });
+
+  // Sync the pills when the settings modal opens (in case the toggle was off-screen)
+  var settingsModal = document.getElementById('settingsModal');
+  if (settingsModal) {
+    var observer = new MutationObserver(function(){
+      var active = body.getAttribute('data-theme') || 'dark';
+      radios.forEach(function(r){
+        if (r.value === active) r.checked = true;
+      });
+    });
+    observer.observe(settingsModal, { attributes: true, attributeFilter: ['class'] });
+  }
+})();
+
 function toggleSetting(key) {
   settings[key] = !settings[key];
   const el = document.getElementById('toggle-' + key);
@@ -948,13 +1657,14 @@ function toggleSetting(key) {
     if (el.type === 'checkbox') el.checked = settings[key];
     else el.className = 'toggle-switch' + (settings[key] ? ' on' : '');
   }
-  localStorage.setItem('jdi_settings', JSON.stringify(settings));
+  localStorage.setItem(settingsKey(), JSON.stringify(settings));
   renderMain(); // re-render in case showDescriptions changed
 }
 
 // ── DATA ────────────────────────────────────────────────────
 function saveTasks() {
-  localStorage.setItem('jdi_tasks', JSON.stringify(tasks));
+  if (!currentUser) return;
+  localStorage.setItem(taskKey(), JSON.stringify(tasks));
 }
 
 function exportData() {
@@ -967,7 +1677,38 @@ function exportData() {
   showToast('📥 Tasks exported!');
 }
 
+function downloadTasksFile() {
+  const json = JSON.stringify({
+    exportedAt: new Date().toISOString(),
+    count: tasks.length,
+    tasks: tasks
+  }, null, 2);
+
+  // Trigger real file download
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'tasks_' + todayStr() + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  // Bonus: copy to clipboard as a fallback
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(json).then(function(){
+      showToast('⬇️ JSON downloaded & copied');
+    }, function(){
+      showToast('⬇️ JSON downloaded');
+    });
+  } else {
+    showToast('⬇️ JSON downloaded');
+  }
+}
+
 function clearAllTasks() {
+  if (!currentUser) return;
   if (!confirm('Delete ALL tasks permanently?')) return;
   tasks = [];
   saveTasks();
@@ -1020,8 +1761,18 @@ document.querySelectorAll('.modal').forEach(m => {
 });
 
 // ── INIT ────────────────────────────────────────────────────
-renderMain();
-updateCounts();
+(function init() {
+  currentUser = loadSession();
+  if (currentUser) {
+    loadUserData();
+    renderUserChip();
+    const accEl = document.getElementById('accountEmailLabel');
+    if (accEl) accEl.textContent = 'Signed in as ' + currentUser.email;
+    hideAuth();
+  } else {
+    showAuth();
+  }
+})();
 </script>
 </body>
 </html>

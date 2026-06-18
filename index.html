@@ -33,6 +33,59 @@
       overflow-x: hidden;
     }
 
+    /* ── THEME TOGGLE (Uiverse.io by LightAndy1) ── */
+    .wrapper {
+      --font-color-dark: #bebfc5;
+      --font-color-light: #bebfc5;
+      --bg-color: #212121;
+      --main-color: #0c0c0c;
+      --secondary-color: #141414;
+      position: relative;
+      width: 250px;
+      height: 36px;
+      background-color: var(--bg-color);
+      border: 2px solid var(--main-color);
+      border-radius: 34px;
+      display: flex;
+      flex-direction: row;
+      box-shadow: 4px 4px var(--main-color);
+    }
+    .wrapper .option {
+      margin-right: 5px;
+      width: 80.5px;
+      height: 28px;
+      position: relative;
+      top: 2px;
+      left: 2px;
+      border-radius: 34px;
+      transition: 0.25s cubic-bezier(0, 0, 0, 1);
+    }
+    .wrapper .option:last-child { margin-right: 4px; }
+    .wrapper .option:hover { background-color: var(--secondary-color); }
+    .wrapper .option:hover .span { color: var(--font-color-light); }
+    .wrapper .input {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0; top: 0;
+      appearance: none;
+      cursor: pointer;
+    }
+    .wrapper .btn {
+      width: 100%; height: 100%;
+      border-radius: 50px;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .wrapper .span { color: var(--font-color-dark); }
+    .wrapper .input:checked + .btn {
+      background-color: var(--main-color);
+      transition: 0.2s cubic-bezier(0, 0, 0, 1);
+    }
+    .wrapper .input:checked + .btn .span {
+      color: var(--font-color-light);
+      transition: 0.25s cubic-bezier(0, 0, 0, 1);
+    }
+
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -41,6 +94,7 @@
       background: rgba(11,15,26,0.85);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
+      gap: 16px;
     }
     .nav-logo {
       font-family: 'Space Grotesk', sans-serif;
@@ -259,8 +313,9 @@
     /* ── CONTACT ── */
     #contact { background: var(--surface); }
     .contact-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+      display: flex; flex-wrap: wrap; gap: 48px; align-items: start;
     }
+    .contact-info { flex: 1 1 320px; min-width: 0; }
     .contact-info p { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
     .contact-items { display: flex; flex-direction: column; gap: 14px; }
     .contact-item {
@@ -276,7 +331,7 @@
     .contact-form {
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 32px;
-      flex: 1; max-width: 450px; margin-top: 45px; margin-left: auto;
+      flex: 1 1 320px; max-width: 450px; margin-top: 0; margin-left: auto;
     }
     .form-group { margin-bottom: 18px; }
     .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 7px; text-transform: uppercase; letter-spacing: .05em; }
@@ -309,11 +364,11 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
       .hero-stats { gap: 24px; }
       .contact-form {
-        margin-top: 80px; /* Pushes the form down on phones */
-        max-width: 100%; /* Makes the form take full width on smaller screens */
+        margin-top: 24px;
+        max-width: 100%;
         margin-left: 0;
       }
     }
@@ -398,7 +453,7 @@
     <div class="project-card">
       <div class="project-header">
         <div class="fractal-container">
-          <img src="https://dev183636.github.io/Tree/fractal-tree.png" style="width: 134%; height: 250px; object-fit: cover; border-radius: 8px;" alt="Fractal Tree" />
+          <img src="https://dev183636.github.io/Tree/fractal-tree.png" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px;" alt="Fractal Tree" />
         </div>
         <span class="project-status">✓ Completed</span>
       </div>
@@ -419,7 +474,7 @@
     <div class="project-card">
       <div class="project-header">
         <div class="fractal-container">
-          <img src="To do list/To-do-list.png" style="width: 138%; height: auto; object-fit: cover; border-radius: 10px;;" alt="To-Do List" />
+          <img src="To do list/To-do-list.png" style="width: 100%; height: auto; object-fit: cover; border-radius: 10px;" alt="To-Do List" />
         </div>
         <span class="project-status">✓ Completed</span>
       </div>
@@ -441,7 +496,7 @@
           <div class="project-card">
       <div class="project-header">
         <div class="fractal-container">
-                <img src="Spider Clock/Spider.png" style="width: 134%; height: auto; object-fit: cover; border-radius: 10px;;" alt="Spider Clock" />
+                <img src="Spider Clock/Spider.png" style="width: 100%; height: auto; object-fit: cover; border-radius: 10px;" alt="Spider Clock" />
         </div>
         <span class="project-status">✓ Completed</span>
       </div>
@@ -614,6 +669,73 @@
 <footer>
   Built by <span>Dev Yadav</span> ·Delhi, India · devyadav183636@gmail.com
 </footer>
+
+<script>
+  (function(){
+    // Redirect target (relative path so it works on GitHub Pages / any subpath)
+    var REDIRECT_URL = 'Security/security.html';
+
+    // Block right-click (prevents "Inspect" / "View Source" via context menu)
+    document.addEventListener('contextmenu', function(e){
+      e.preventDefault();
+      window.location.replace(REDIRECT_URL);
+    });
+
+    // Block keyboard shortcuts: F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S
+    document.addEventListener('keydown', function(e){
+      var key = e.key || e.keyCode;
+      var k = typeof key === 'string' ? key.toUpperCase() : key;
+
+      // F12
+      if (k === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+        window.location.replace(REDIRECT_URL);
+        return;
+      }
+
+      // Ctrl/Cmd + Shift + I / J / C  (DevTools)
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+          (k === 'I' || k === 'J' || k === 'C' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+        e.preventDefault();
+        window.location.replace(REDIRECT_URL);
+        return;
+      }
+
+      // Ctrl/Cmd + U  (View Source)
+      if ((e.ctrlKey || e.metaKey) && (k === 'U' || e.keyCode === 85)) {
+        e.preventDefault();
+        window.location.replace(REDIRECT_URL);
+        return;
+      }
+
+      // Ctrl/Cmd + S  (Save Page)
+      if ((e.ctrlKey || e.metaKey) && (k === 'S' || e.keyCode === 83)) {
+        e.preventDefault();
+        window.location.replace(REDIRECT_URL);
+        return;
+      }
+    });
+
+    // Detect DevTools opening (best-effort) and redirect.
+    // Disabled by default — this heuristic is unreliable and fires on
+    // normal scrolling/resizing/multi-monitor setups. Enable only if needed.
+    function detectAndRedirectDevTools(){
+      var devtoolsOpen = false;
+      var threshold = 160;
+      setInterval(function(){
+        var widthDiff  = window.outerWidth  - window.innerWidth;
+        var heightDiff = window.outerHeight - window.innerHeight;
+        if (widthDiff > threshold || heightDiff > threshold) {
+          if (!devtoolsOpen) {
+            devtoolsOpen = true;
+            window.location.replace(REDIRECT_URL);
+          }
+        }
+      }, 1000);
+    }
+    // detectAndRedirectDevTools();  // uncomment to enable (not recommended)
+  })();
+</script>
 
 </body>
 </html>

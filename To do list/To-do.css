@@ -530,3 +530,175 @@
   -moz-transition: box-shadow 0.2s ease-in;
   transition: box-shadow 0.2s ease-in;
 }
+
+/*heading*/
+
+/* Add task input box */
+.form-group .input {
+  max-width: 100%; /* Adjusted from 190px to fit your modal width */
+  height: 2rem;
+  background-color: transparent;
+  border: 2px solid transparent;
+  color: white;
+  padding: 1rem;
+  box-shadow: 2px 2px 5px black, inset 2px 2px 5px rgb(53, 51, 51),
+    -1px -1px 20px rgba(59, 56, 56, 0.781);
+  outline: none;
+  border-radius: 10px;
+  font-size: medium;
+}
+
+.form-group .input:focus {
+  box-shadow: 2px 2px 5px black, inset 2px 2px 5px black,
+    -1px -1px 5px rgba(68, 67, 67, 0.781),
+    inset -1px -1px 5px rgba(66, 65, 65, 0.822);
+  border-color: transparent; /* Overrides the generic blue border on focus */
+}
+
+/*Delete*/
+/* From Uiverse.io by jarsaniya_1588 */ 
+@import url("s://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");
+
+.tooltip-demo {
+  font-family: "Inter", sans-serif;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.tip-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.tip-btn {
+  font-family: "Inter", sans-serif;
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.222);
+  background: rgba(255, 255, 255, 0.06);
+  color: #a5a5a5;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.tip-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.tip-btn--alt {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.tip-btn--warn {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.25);
+}
+
+/* Tooltip bubble */
+.tip-wrap::after {
+  content: attr(data-tip-text, "");
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(0px);
+  white-space: nowrap;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.25s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 100;
+}
+
+/* Per-button tooltip via CSS custom tooltips */
+.tip-btn {
+  position: relative;
+}
+
+/* Use a different approach — custom data attribute tooltip */
+.tip-wrap {
+  --tooltip: attr(data-tip);
+}
+
+/* Actual tooltip */
+.tip-btn::before {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px) scale(0.85);
+  bottom: calc(100% + 10px);
+  white-space: nowrap;
+  padding: 7px 14px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+  font-size: 12px;
+  font-weight: 500;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+/* Arrow */
+.tip-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px) scale(0.85);
+  bottom: calc(100% + 4px);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #1e293b;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 100;
+}
+
+.tip-btn:hover::before,
+.tip-btn:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Spectrum left highlight on tooltip */
+.tip-btn::before {
+  border-left: 3px solid transparent;
+}
+
+.tip-btn:not(.tip-btn--alt):not(.tip-btn--warn)::before {
+  border-left-color: #a78bfa;
+}
+
+.tip-btn--alt::before {
+  border-left-color: #38bdf8;
+}
+
+.tip-btn--warn::before {
+  border-left-color: #f87171;
+}
+

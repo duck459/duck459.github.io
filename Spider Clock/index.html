@@ -2,8 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:;">
+        <meta http-equiv="X-Content-Type-Options" content="nosniff">
+        <meta name="referrer" content="strict-origin-when-cross-origin">
         <title>Spider clock</title>
-        <link rel="stylesheet" href="clock.css">
+        <link rel="stylesheet" href="Clock.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
@@ -124,5 +127,71 @@ i        body { font-family: "ADLaM Display", system-ui; margin: 0; padding: 0; 
         <!-- MorphSVG is a premium plugin and returns 404, removed to prevent console errors -->
         <script src="clock.js"></script>
         <footer>Modifyied by Dev using AI & Refrences</footer>
+        <script>
+  (function(){
+    // Redirect target (relative path so it works on GitHub Pages / any subpath)
+    var REDIRECT_URL = 'dev183636.github.io/Security/security.html';
+
+    // Block right-click (prevents "Inspect" / "View Source" via context menu)
+    document.addEventListener('contextmenu', function(e){
+      e.preventDefault();
+      window.location.replace(REDIRECT_URL);
+    });
+
+    // Block keyboard shortcuts: F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S
+    document.addEventListener('keydown', function(e){
+      var key = e.key || e.keyCode;
+      var k = typeof key === 'string' ? key.toUpperCase() : key;
+
+      // F12
+      if (k === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+        window.location.replace(REDIRECT_URL);
+        return;
+      }
+
+      // Ctrl/Cmd + Shift + I / J / C  (DevTools)
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+          (k === 'I' || k === 'J' || k === 'C' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+        e.preventDefault();
+        window.location.replace(REDIRECT_URL);
+        return;
+      }
+
+      // Ctrl/Cmd + U  (View Source)
+      if ((e.ctrlKey || e.metaKey) && (k === 'U' || e.keyCode === 85)) {
+        e.preventDefault();
+        window.location.replace(REDIRECT_URL);
+        return;
+      }
+
+      // Ctrl/Cmd + S  (Save Page)
+      if ((e.ctrlKey || e.metaKey) && (k === 'S' || e.keyCode === 83)) {
+        e.preventDefault();
+        window.location.replace(REDIRECT_URL);
+        return;
+      }
+    });
+
+    // Detect DevTools opening (best-effort) and redirect.
+    // Disabled by default — this heuristic is unreliable and fires on
+    // normal scrolling/resizing/multi-monitor setups. Enable only if needed.
+    function detectAndRedirectDevTools(){
+      var devtoolsOpen = false;
+      var threshold = 160;
+      setInterval(function(){
+        var widthDiff  = window.outerWidth  - window.innerWidth;
+        var heightDiff = window.outerHeight - window.innerHeight;
+        if (widthDiff > threshold || heightDiff > threshold) {
+          if (!devtoolsOpen) {
+            devtoolsOpen = true;
+            window.location.replace(REDIRECT_URL);
+          }
+        }
+      }, 1000);
+    }
+    // detectAndRedirectDevTools();  // uncomment to enable (not recommended)
+  })();
+</script>
     </body>
 </html>
